@@ -80,11 +80,87 @@
       border-radius: 4px;
       border: 1px solid #ccc;
     }
+
+    #toggle-button {
+      position: absolute;
+      top: 8px;
+      right: 8px;
+      background: none;
+      border: none;
+      font-size: 18px;
+      cursor: pointer;
+    }
+
+    /* INNOVATEX HEADER STYLES */
+    #map-header {
+      position: absolute;
+      top: 10px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 1100;
+      text-align: center;
+      color: white;
+      font-family: sans-serif;
+      pointer-events: none;
+    }
+
+    #map-header h1 {
+      margin: 0;
+      font-size: 28px;
+      font-weight: bold;
+    }
+
+    #map-header .white-text {
+      color: white;
+    }
+
+    #map-header .blue-text {
+      color: #00bfff;
+    }
+
+    #map-header p {
+      margin: 2px 0 0;
+      font-size: 14px;
+      color: white;
+    }
+
+    /* LOGO TOP LEFT */
+    #logo-top-left {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      height: 60px;
+      z-index: 1100;
+      pointer-events: auto;
+      opacity: 0.9;
+    }
+    #logo-top-right {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      height: 65px;
+      z-index: 1100;
+      pointer-events: auto;
+      opacity: 0.9;
+    }
   </style>
 </head>
 <body>
+
+  <!-- Transparent Logo in Top Left Corner -->
+  <img id="logo-top-left" src="https://iccams-presidencyuniversity.netlify.app/author_registration/images/WhitePresidency-University-Logo_madhu_16-04-21-01.png" alt="Presidency Logo">
+  <!-- Logo Top Right -->
+  <img id="logo-top-right" src="https://avatars.githubusercontent.com/u/142566947?s=280&v=4" alt="Build Club Logo">
+
+  <!-- INNOVATEX HEADER -->
+  <div id="map-header">
+    <h1><span class="white-text">INNOVATE</span><span class="blue-text"> X</span><span class="blue-text"> 3.0</span></h1>
+    <p>National level Tech fest</p>
+  </div>
+
   <div id="map"></div>
   <div id="event-list">
+    <button id="toggle-button">−</button>
     <h3>Event Locations</h3>
     <div class="legend">
       <span style="background:blue;"></span> Day 1 Events<br>
@@ -97,6 +173,7 @@
 
   <script>
     const map = L.map('map').setView([13.1689, 77.5347], 15);
+    map.zoomControl.setPosition('bottomright'); // 👈 Move zoom controls to bottom right
     L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
       attribution: 'Tiles &copy; Esri'
     }).addTo(map);
@@ -107,18 +184,15 @@
       [13.168466, 77.535834, 'Maze Runner, Outside Auditorium<br>Event Head: Hrishikesh<br>Contact No: 8431911666', 'blue', 'https://ukmars.org/ukmars/wp-content/uploads/2022/04/IMG_2032lowRes.jpg'],
       [13.169124, 77.534780, 'Robo Soccer, Front of Canopy<br>Event Head: Amogh<br>Contact No: 7990965318', 'blue', 'https://i.ytimg.com/vi/nJrlAS0UBuA/hq720.jpg'],
       [13.167549, 77.533214, 'Hardware Hackathon, S Block 4th Floor Innovation Lab,<br>Event Head: Satvik K R<br>Contact No: 9482380560', 'blue', 'https://venturebeat.com/wp-content/uploads/2013/11/8346004151_640530f3f6_z.jpg?w=400'],
-
       [13.170112, 77.534969, 'Dronetrix Day Light, OLD Football Ground,<br>Event Head: Bhuvan A<br>Contact No: 7019543882', 'red', 'https://blogs.icrc.org/app/uploads/sites/102/2022/03/Drone-image-1096x620.jpg'],
       [13.169159, 77.534706, 'Robo Wars, Basketball Court,<br>Event Head: Shivam<br>Contact No: 8050765537', 'red', 'https://i0.wp.com/roboticsindia.live/wp-content/uploads/2021/03/SAVE_20210324_194657.jpg'],
       [13.169747, 77.533612, 'RC Rally Off Road, Beside D Block,<br>Event Head: Hemanth<br>Contact No: 9353000578', 'red', 'https://rctrack.ca/wp-content/uploads/2022/05/3333.jpg'],
       [13.168933, 77.533561, 'Software Hackathon, E Block Classrooms,<br>Event Head: Pavan K<br>Contact No: 7760895008', 'red', 'https://t3.ftcdn.net/jpg/09/69/81/24/360_F_969812412_systV9XyudfkWUBPml0DN4WJmr8xkUAF.jpg'],
       [13.168910, 77.533567, 'Pixel Craft, E Block Classrooms,<br>Event Head: Bhrighu<br>Contact No: 7006901099', 'red', 'https://images.squarespace-cdn.com/content/v1/5d139a978680e80001bede30/82424ebb-009a-46ea-8d62-42f93e05b39e/UI+vs+UX+Design+Cover+Image.jpg'],
-
       [13.170045, 77.533043, 'RC Plane, New Football Ground,<br>Event Head: Amogh<br>Contact No: 7990965318', 'green', 'https://beginner.flitetest.com/wp-content/uploads/2023/11/mighty-mini-rc-plane.webp'],
       [13.168540, 77.533542, 'Pitchathon, E and F Block Seminar Hall,<br>Event Head: Rohan S Kumar<br>Contact No: 9901804849', 'green', 'https://media.greenmatters.com/brand-img/PEKL1expw/0x0/shark-tank-eco-1624293144363.jpg'],
       [13.167557, 77.533121, 'Project Expo, S Block 4th Floor Innovation Lab,<br>Event Head: Harshavardhan<br>Contact No: 9880311801', 'green', 'https://venturebeat.com/wp-content/uploads/2013/11/8346004151_640530f3f6_z.jpg?w=400'],
       [13.168139, 77.535863, 'Humpty Dumpty, M Block,<br>Event Head: Vamshidhar Reddy<br>Contact No: 8639702978', 'green', 'https://venturebeat.com/wp-content/uploads/2013/11/8346004151_640530f3f6_z.jpg?w=400'],
-
       [13.168428805476314, 77.53610240582404, 'Auditorium', 'gray', 'https://presidencyuniversity.in/assets/frontend/images/auditorium-sm.webp'],
       [13.168376571888068, 77.53639275494764, 'Cafeteria', 'gray', 'https://www.admissionfever.com/Media/clgimg/gallery/2524_img7881897384687587.jpg'],
       [13.168481445979214, 77.53436618410021, 'Uday Upahara', 'gray', 'https://media.licdn.com/dms/image/v2/C5622AQE-T4dMrH5yCQ/feedshare-shrink_2048_1536/feedshare-shrink_2048_1536/0/1590494263301?e=2147483647&v=beta&t=FPH-wJQZqSDMiTKZ6bvskvUySQbaiXfdn9zllkTkyGw'],
@@ -130,6 +204,20 @@
 
     const markers = [];
     const listContent = document.getElementById('list-content');
+    const eventList = document.getElementById('event-list');
+    const toggleButton = document.getElementById('toggle-button');
+    const searchBar = document.getElementById('search-bar');
+    const legend = document.querySelector('.legend');
+    const heading = eventList.querySelector('h3');
+
+    toggleButton.addEventListener('click', () => {
+      const isVisible = listContent.style.display !== 'none';
+      listContent.style.display = isVisible ? 'none' : 'block';
+      searchBar.style.display = isVisible ? 'none' : 'block';
+      legend.style.display = isVisible ? 'none' : 'block';
+      heading.style.display = isVisible ? 'none' : 'block';
+      toggleButton.textContent = isVisible ? '+' : '−';
+    });
 
     locations.forEach((loc, index) => {
       const [lat, lng, desc, color, img] = loc;
