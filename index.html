@@ -166,9 +166,12 @@
         font-size: 12px;
       }
 
-      #logo-top-left,
-      #logo-top-right {
+      #logo-top-left {
         height: 45px;
+      }
+
+      #logo-top-right {
+        height: 48px;
       }
 
       .event-item {
@@ -199,6 +202,14 @@
 
       #map-header p {
         font-size: 11px;
+      }
+
+      #logo-top-left {
+        height: 38px;
+      }
+
+      #logo-top-right {
+        height: 40px;
       }
 
       #search-bar {
@@ -234,7 +245,7 @@
 
   <script>
     const map = L.map('map').setView([13.1689, 77.5347], 15);
-    map.zoomControl.setPosition('bottomright');
+    map.zoomControl.setPosition('bottomleft');
 
     L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
       attribution: 'Tiles &copy; Esri'
