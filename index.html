@@ -8,7 +8,7 @@
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
   <style>
     html, body { margin: 0; padding: 0; height: 100%; }
-    #map { height: 100vh; width: 100%; }
+    #map { height: 94vh; width: 100%; }
 
     .custom-div-icon div {
       position: relative;
@@ -23,12 +23,48 @@
       box-shadow: 0 0 4px rgba(0, 0, 0, 0.4);
       cursor: pointer;
     }
+    .overlay-footer {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      background: rgba(0, 0, 0, 0.6); /* semi-transparent black */
+      color: #fff;
+      text-align: center;
+      font-size: 13px;
+      padding: 2px 0;
+      z-index: 9999;
+      backdrop-filter: blur(5px); /* optional: glass effect */
+      font-family: Arial, sans-serif;
+    }
+    .overlay-header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      background: rgba(18, 191, 221, 0.066); /* Semi-transparent background */
+      color: #fff;
+      text-align: center;
+      font-size: 18px;
+      padding: 35px 0;
+      z-index: 9999;
+      backdrop-filter: blur(5px); /* Optional glass effect */
+      font-family: Arial, sans-serif;
+      box-shadow: 0 1px 3px rgba(254, 254, 254, 0.486);
+    }
+    
+    .overlay-header h1 {
+      margin: 0;
+      font-size: 20px;
+    }
+    
+    
 
     #event-list {
       position: absolute;
-      bottom: 20px;
+      bottom: 85px;
       right: 20px;
-      background: rgba(255, 255, 255, 0.95);
+      background: rgba(166, 216, 243, 0.95);
       padding: 10px;
       border-radius: 8px;
       max-height: 400px;
@@ -136,9 +172,9 @@
     #logo-top-right {
       position: absolute;
       top: 10px;
-      right: 10px;
-      height: 65px;
-      z-index: 1100;
+      right: 15px;
+      height: 70px;
+      z-index: 1200;
       pointer-events: auto;
       opacity: 0.9;
     }
@@ -220,28 +256,35 @@
   </style>
 </head>
 <body>
+  <header class="overlay-header">
+    <div id="map-header">
+      <h1><span class="white-text">INNO</span><span class="blue-text"> MAPS</span><span class="blue-text"></span></h1>
+      <p>Built by Innovators, for Explorers</p>
+    </div>
+    <img id="logo-top-right" src="build.png" alt="Build Club Logo">
+    <img id="logo-top-left" src="https://iccams-presidencyuniversity.netlify.app/author_registration/images/WhitePresidency-University-Logo_madhu_16-04-21-01.png" alt="Presidency Logo">
 
-  <img id="logo-top-left" src="https://iccams-presidencyuniversity.netlify.app/author_registration/images/WhitePresidency-University-Logo_madhu_16-04-21-01.png" alt="Presidency Logo">
-  <img id="logo-top-right" src="https://avatars.githubusercontent.com/u/142566947?s=280&v=4" alt="Build Club Logo">
+  </header>
+  
 
-  <div id="map-header">
-    <h1><span class="white-text">INNOVATE</span><span class="blue-text"> X</span><span class="blue-text"> 3.0</span></h1>
-    <p>National level Tech fest</p>
-  </div>
+
+
 
   <div id="map"></div>
 
   <div id="event-list">
     <button id="toggle-button">−</button>
-    <h3>Event Locations</h3>
+    <h3>Locations</h3>
     <div class="legend">
-      <span style="background:blue;"></span> Day 1 Events<br>
-      <span style="background:red;"></span> Day 2 Events<br>
-      <span style="background:green;"></span> Day 3 Events
+      <span style="background:blue;"></span> ALL The Blocks<br>
+      <span style="background:red;"></span> Seminar Halls<br>
+      <span style="background:green;"></span> Main Blocks<br>
+      <span style="background:grey;"></span> Refreshments and Rest rooms<br>
     </div>
-    <input type="text" id="search-bar" placeholder="Search events...">
+    <input type="text" id="search-bar" placeholder="Where You want to go....">
     <div id="list-content"></div>
   </div>
+  
 
   <script>
     const map = L.map('map').setView([13.1689, 77.5347], 15);
@@ -257,27 +300,33 @@
     }
 
     const locations = [
-      [13.170225, 77.535025, 'Dronetrix Night Light, OLD Football Ground,<br>Event Head: Bhuvan A<br>Contact No: 7019543882', 'blue', 'https://t4.ftcdn.net/jpg/11/55/28/31/360_F_1155283171_GsVNAZ1wfilO1VnFh3uxrqIoKAY2LRqH.jpg'],
-      [13.168270, 77.533321, 'Line Follower, L Block Basement<br>Event Head: Gagana S<br>Contact No: 8310820700', 'blue', 'https://hackster.imgix.net/uploads/attachments/1204532/line_follower_robot_using_arduino_uno_and_ir_sensor1_3r2sU2hay2.jpg'],
-      [13.168466, 77.535834, 'Maze Runner, Outside Auditorium<br>Event Head: Hrishikesh<br>Contact No: 8431911666', 'blue', 'https://ukmars.org/ukmars/wp-content/uploads/2022/04/IMG_2032lowRes.jpg'],
-      [13.169124, 77.534780, 'Robo Soccer, Front of Canopy<br>Event Head: Amogh<br>Contact No: 7990965318', 'blue', 'https://i.ytimg.com/vi/nJrlAS0UBuA/hq720.jpg'],
-      [13.167549, 77.533214, 'Hardware Hackathon, S Block 4th Floor Innovation Lab,<br>Event Head: Satvik K R<br>Contact No: 9482380560', 'blue', 'https://venturebeat.com/wp-content/uploads/2013/11/8346004151_640530f3f6_z.jpg?w=400'],
-      [13.170112, 77.534969, 'Dronetrix Day Light, OLD Football Ground,<br>Event Head: Bhuvan A<br>Contact No: 7019543882', 'red', 'https://blogs.icrc.org/app/uploads/sites/102/2022/03/Drone-image-1096x620.jpg'],
-      [13.169159, 77.534706, 'Robo Wars, Basketball Court,<br>Event Head: Shivam<br>Contact No: 8050765537', 'red', 'https://i0.wp.com/roboticsindia.live/wp-content/uploads/2021/03/SAVE_20210324_194657.jpg'],
-      [13.169747, 77.533612, 'RC Rally Off Road, Beside D Block,<br>Event Head: Hemanth<br>Contact No: 9353000578', 'red', 'https://rctrack.ca/wp-content/uploads/2022/05/3333.jpg'],
-      [13.168933, 77.533561, 'Software Hackathon, E Block Classrooms,<br>Event Head: Pavan K<br>Contact No: 7760895008', 'red', 'https://t3.ftcdn.net/jpg/09/69/81/24/360_F_969812412_systV9XyudfkWUBPml0DN4WJmr8xkUAF.jpg'],
-      [13.168910, 77.533567, 'Pixel Craft, E Block Classrooms,<br>Event Head: Bhrighu<br>Contact No: 7006901099', 'red', 'https://images.squarespace-cdn.com/content/v1/5d139a978680e80001bede30/82424ebb-009a-46ea-8d62-42f93e05b39e/UI+vs+UX+Design+Cover+Image.jpg'],
-      [13.170045, 77.533043, 'RC Plane, New Football Ground,<br>Event Head: Amogh<br>Contact No: 7990965318', 'green', 'https://beginner.flitetest.com/wp-content/uploads/2023/11/mighty-mini-rc-plane.webp'],
-      [13.168540, 77.533542, 'Pitchathon, E and F Block Seminar Hall,<br>Event Head: Rohan S Kumar<br>Contact No: 9901804849', 'green', 'https://media.greenmatters.com/brand-img/PEKL1expw/0x0/shark-tank-eco-1624293144363.jpg'],
-      [13.167557, 77.533121, 'Project Expo, S Block 4th Floor Innovation Lab,<br>Event Head: Harshavardhan<br>Contact No: 9880311801', 'green', 'https://presidencyuniversity.in/assets/images/expo-1.jpg'],
-      [13.168139, 77.535863, 'Humpty Dumpty, M Block,<br>Event Head: Vamshidhar Reddy<br>Contact No: 8639702978', 'green', 'https://i.ytimg.com/vi/4y6_K1R_1RY/maxresdefault.jpg'],
-      [13.168428805476314, 77.53610240582404, 'Auditorium', 'gray', 'https://presidencyuniversity.in/assets/frontend/images/auditorium-sm.webp'],
-      [13.168376571888068, 77.53639275494764, 'Cafeteria', 'gray', 'https://www.admissionfever.com/Media/clgimg/gallery/2524_img7881897384687587.jpg'],
+      [13.167549, 77.533214, 'Innovation Lab S Block 4th Floor', 'blue', 'https://venturebeat.com/wp-content/uploads/2013/11/8346004151_640530f3f6_z.jpg?w=400'],
+      [13.167394, 77.533096, 'U Block', 'blue', 'https://presidencyuniversity.in/uploads/events/6720bef8a9a391730199288.jpg'],
+      [13.167666, 77.533411, 'Q Block', 'blue', 'https://presidencyuniversity.in/uploads/events/6720bef8a9a391730199288.jpg'],
+      [13.168269, 77.533232, 'L Block', 'blue', 'https://presidencyuniversity.in/uploads/events/6720bef8a9a391730199288.jpg'],
+      [13.168600, 77.533340, 'F Block', 'blue', 'https://presidencyuniversity.in/uploads/events/6720bef8a9a391730199288.jpg'],
+      [13.168933, 77.533561, 'E Block', 'blue', 'https://presidencyuniversity.in/uploads/events/6720bef8a9a391730199288.jpg'],
+      [13.168293310979077, 77.53538507491174, 'Management Block', 'blue', 'https://presidencyuniversity.in/uploads/events/6720bef8a9a391730199288.jpg'],
+      [13.169364237722265, 77.53350661748166, 'D Block', 'blue', 'https://presidencyuniversity.in/uploads/events/6720bef8a9a391730199288.jpg'],
+      [13.167154, 77.533524, 'U Block', 'blue', 'https://presidencyuniversity.in/uploads/events/6720bef8a9a391730199288.jpg'],
+      [13.167425, 77.533614, 'R Block', 'blue', 'https://presidencyuniversity.in/uploads/events/6720bef8a9a391730199288.jpg'],
+      [13.167820, 77.533824, 'P Block', 'blue', 'https://presidencyuniversity.in/uploads/events/6720bef8a9a391730199288.jpg'],
+      [13.168138, 77.533914, 'N Block', 'blue', 'https://presidencyuniversity.in/uploads/events/6720bef8a9a391730199288.jpg'],
+      [13.168640030226847, 77.53393556864103, 'J Block', 'blue', 'https://presidencyuniversity.in/uploads/events/6720bef8a9a391730199288.jpg'],
+      [13.168711851331121, 77.53413941652181, 'H Block', 'blue', 'https://presidencyuniversity.in/uploads/events/6720bef8a9a391730199288.jpg'],
+      [13.168380168237185, 77.53405358583517, 'K Block', 'blue', 'https://presidencyuniversity.in/uploads/events/6720bef8a9a391730199288.jpg'],
+      [13.169011262394708, 77.53471844658185, 'Glass Building', 'green', 'https://content.jdmagicbox.com/v2/comp/bangalore/t8/080pxx80.xx80.190720191721.y9t8/catalogue/presidency-university-dibbur-bangalore-universities-6n34f77mrb-250.jpg'],
+      [13.169782, 77.535607, 'Main Lawn', 'green', 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSG2DLaAGB1BNDor7DbEF2b9pfEnkuEvrR-wA&s'],
+      [13.168439, 77.535478, 'Department Of Student Affairs(DSA)', 'green', 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRr3xwWPfmycvUkBkT6etrJHbC4XPooEhyXlQ&s'],
+      [13.16856, 77.53497, 'Office of International Affairs(OIA)', 'green', 'https://media.licdn.com/dms/image/v2/C5612AQEG2Fg7iaLcUQ/article-cover_image-shrink_720_1280/article-cover_image-shrink_720_1280/0/1640661352764?e=2147483647&v=beta&t=YDGTDJDNC4vnvtW5uu5LlSHhVODM-Lem_t4J3zzn7mc'],
+      [13.169052, 77.534035, 'Addmission Office and Register Office', 'green', 'https://presidencyuniversity.in/uploads/images/6703c923a753a1728301347.webp'],
+      [13.168853, 77.533748, 'E Block Seminar Hall', 'red', 'https://beginner.flitetest.com/wp-content/uploads/2023/11/mighty-mini-rc-plane.webp'],
+      [13.168544, 77.533614, 'F Block Seminar Hall', 'red', 'https://images.squarespace-cdn.com/content/v1/5d139a978680e80001bede30/82424ebb-009a-46ea-8d62-42f93e05b39e/UI+vs+UX+Design+Cover+Image.jpg'],
+      [13.168428805476314, 77.53610240582404, 'Auditorium', 'red', 'https://presidencyuniversity.in/assets/frontend/images/auditorium-sm.webp'],
+      [13.168376571888068, 77.53639275494764, 'Cafeteria', 'gray', 'https://content3.jdmagicbox.com/v2/comp/bangalore/t8/080pxx80.xx80.190720191721.y9t8/catalogue/presidency-university-dibbur-bangalore-universities-yh3kg1llw4.jpg'],
       [13.168481445979214, 77.53436618410021, 'Uday Upahara', 'gray', 'https://media.licdn.com/dms/image/v2/C5622AQE-T4dMrH5yCQ/feedshare-shrink_2048_1536/feedshare-shrink_2048_1536/0/1590494263301?e=2147483647&v=beta&t=FPH-wJQZqSDMiTKZ6bvskvUySQbaiXfdn9zllkTkyGw'],
       [13.169256757345009, 77.53413347118573, 'Subway And Hatti Kappi', 'gray', 'https://presidencyuniversity.in/assets/frontend/images/cafeteria-food-courts.webp'],
       [13.17178764418144, 77.53616562179174, 'Main Gate', 'gray', 'https://content3.jdmagicbox.com/v2/comp/bangalore/t8/080pxx80.xx80.190720191721.y9t8/catalogue/presidency-university-dibbur-bangalore-universities-7pp4ze8bpf.jpg'],
-      [13.171852865826386, 77.53625868199003, 'Registration Desk External', 'gray', 'https://media.licdn.com/dms/image/v2/C5622AQEpV_UwMr6LmQ/feedshare-shrink_800/feedshare-shrink_800/0/1673339492178?e=2147483647&v=beta&t=IpjtD4iVGonT_yhDwB6ZyDzMtID6h-q1s3bnxeTzRsE'],
-      [13.169066040374004, 77.53487003395126, 'Registration Desk Internal', 'gray', 'https://content3.jdmagicbox.com/v2/comp/bangalore/e5/080pxx80.xx80.160802124301.d2e5/catalogue/presidency-engineering-college-yelahanka-bangalore-colleges-z23s0h33jx.jpg'],
       [13.168452, 77.535304, 'Wash Rooms 1', 'gray', 'https://euronics.co.in/wp-content/uploads/2024/11/03.jpg'],
       [13.168608, 77.533478, 'Wash Rooms 2', 'gray', 'https://euronics.co.in/wp-content/uploads/2024/11/03.jpg'],
       [13.167834445868888, 77.5333534600714, 'Wash Rooms 3', 'gray', 'https://euronics.co.in/wp-content/uploads/2024/11/03.jpg']
@@ -353,5 +402,12 @@
       });
     });
   </script>
+  <script src="script.js"></script>
+  <footer class="overlay-footer">
+    <p>Developed By <a href="https://www.linkedin.com/in/bhuvan-a-407b83255" target="_blank" style="color: #00aced; text-decoration: underline;">Bhuvan</a></p>
+    <p>Copyright © 2025 | INNOMAPS -Built by Innovators, for Explorers . All Rights Reserved.</p>
+  </footer>
+  
+  
 </body>
 </html>
